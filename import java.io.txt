@@ -1,0 +1,22 @@
+import java.io.*;
+import java.util.List;
+
+public class FileManager {
+
+    public static void saveToFile(List<Book> books) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("library.dat"))) {
+            out.writeObject(books);
+        } catch (IOException e) {
+            System.out.println("Error saving books to file: " + e.getMessage());
+        }
+    }
+
+    public static List<Book> loadFromFile() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("library.dat"))) {
+            return (List<Book>) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading books from file: " + e.getMessage());
+            return null;
+        }
+    }
+}

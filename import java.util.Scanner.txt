@@ -1,0 +1,100 @@
+import java.util.Scanner;
+
+public class LibraryManagementSystem {
+    private Library library;
+    private Scanner scanner;
+
+    public LibraryManagementSystem() {
+        library = new Library();
+        scanner = new Scanner(System.in);
+    }
+
+    public void start() {
+        while (true) {
+            displayMenu();
+            int choice = getChoice();
+
+            switch (choice) {
+                case 1:
+                    addBook();
+                    break;
+                case 2:
+                    searchBooks();
+                    break;
+                case 3:
+                    viewBooks();
+                    break;
+                case 4:
+                    saveBooksToFile();
+                    break;
+                case 5:
+                    loadBooksFromFile();
+                    break;
+                case 6:
+                    System.out.println("Exiting the system...");
+                    return;
+                default:
+                    System.out.println("Invalid choice, try again.");
+            }
+        }
+    }
+
+    private void displayMenu() {
+        System.out.println("\nLibrary Management System");
+        System.out.println("1. Add a Book");
+        System.out.println("2. Search for a Book");
+        System.out.println("3. View all Books");
+        System.out.println("4. Save Books to File");
+        System.out.println("5. Load Books from File");
+        System.out.println("6. Exit");
+        System.out.print("Enter your choice: ");
+    }
+
+    private int getChoice() {
+        return scanner.nextInt();
+    }
+
+    private void addBook() {
+        scanner.nextLine();  // Consume newline left-over
+        System.out.print("Enter book title: ");
+        String title = scanner.nextLine();
+        System.out.print("Enter author: ");
+        String author = scanner.nextLine();
+        System.out.print("Enter ISBN: ");
+        String isbn = scanner.nextLine();
+        System.out.print("Enter year of publication: ");
+        int year = scanner.nextInt();
+
+        Book book = new Book(title, author, isbn, year);
+        library.addBook(book);
+        System.out.println("Book added successfully!");
+    }
+
+    private void searchBooks() {
+        scanner.nextLine();  // Consume newline left-over
+        System.out.print("Enter book title to search: ");
+        String title = scanner.nextLine();
+        var result = library.searchBooksByTitle(title);
+        if (result.isEmpty()) {
+            System.out.println("No books found with that title.");
+        } else {
+            for (Book book : result) {
+                System.out.println(book);
+            }
+        }
+    }
+
+    private void viewBooks() {
+        library.displayBooks();
+    }
+
+    private void saveBooksToFile() {
+        FileManager.saveToFile(library.getAllBooks());
+        System.out.println("Books saved to file.");
+    }
+
+    private void loadBooksFromFile() {
+        library = FileManager.loadFromFile();
+        System.out.println("Books loaded from file.");
+    }
+}
